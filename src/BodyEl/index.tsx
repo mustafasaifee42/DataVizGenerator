@@ -7,6 +7,7 @@ import { YTickValue } from './GraphEl/Ticks/YTickValue';
 import { XTickValue } from './GraphEl/Ticks/XTickValue';
 import { Bars } from './GraphEl/BarGraph/Bars';
 import { Line } from './GraphEl/LineChart/Line';
+import { MultiLine } from './GraphEl/LineChart/MultiLine';
 import { BarValues } from './GraphEl/BarGraph/BarValues';
 
 const ButtonDiv = styled.div`
@@ -105,13 +106,63 @@ const LinkEl = styled.span<LinkElSettings>`
   text-decoration: ${props => (props.linkStyle === 1 ? 'underline' : 'none')};
 `;
 
+interface KeyContainerAlignment {
+  position: 'flex-start' | 'flex-end' | 'center';
+}
+
+const KeyContainer = styled.div<KeyContainerAlignment>`
+  display: flex;
+  justify-content: ${props => props.position};
+  margin-top: 15px;
+  padding: 0 25px;
+`;
+
+const KeyEl = styled.div`
+  display: flex;
+  margin: 10px;
+  align-items: center;
+  &:first-of-type {
+    margin-left: 0;
+  }
+  &:last-of-type {
+    margin-right: 0;
+  }
+`;
+
+interface ColorKeyProps {
+  fill: string;
+}
+
+const ColorKey = styled.div<ColorKeyProps>`
+  background-color: ${props => props.fill};
+  width: 14px;
+  height: 14px;
+  margin-right: 5px;
+  border-radius: 2px;
+`;
+
+interface KeyTitleElProps {
+  font: string;
+}
+const KeyTitleEl = styled.div<KeyTitleElProps>`
+  font-family: ${props => props.font}
+  font-size: 12px;
+  color: #999999;
+`;
+
 export const BodyEl = () => {
+  const colorIndex = Math.floor(Math.random() * COLORARRAY.length);
+  const [keySettings, updateKeySettings] = useState({
+    alignment: Math.floor(Math.random() * 3),
+  });
   const [primaryFont, updatePrimaryFont] = useState(
     FONTSARRAY[Math.floor(Math.random() * FONTSARRAY.length)],
   );
-  const [primaryColor, updatePrimaryColor] = useState(
-    COLORARRAY[Math.floor(Math.random() * COLORARRAY.length)],
-  );
+  const [colors, updateColors] = useState({
+    primaryColor: COLORARRAY[colorIndex],
+    secondaryColor: COLORARRAY[(colorIndex + 1) % COLORARRAY.length],
+    tertiaryColor: COLORARRAY[(colorIndex + 2) % COLORARRAY.length],
+  });
   const [bgSettings, updateBgSettings] = useState({
     roundedCorner: Math.floor(Math.random() * 3),
     borderShadowSettings: Math.floor(Math.random() * 3),
@@ -153,12 +204,18 @@ export const BodyEl = () => {
     xTickStyle: Math.floor(Math.random() * 3),
   });
   const updatesSettings = () => {
+    const colorIndex = Math.floor(Math.random() * COLORARRAY.length);
     updatePrimaryFont(
       FONTSARRAY[Math.floor(Math.random() * FONTSARRAY.length)],
     );
-    updatePrimaryColor(
-      COLORARRAY[Math.floor(Math.random() * COLORARRAY.length)],
-    );
+    updateKeySettings({
+      alignment: Math.floor(Math.random() * 3),
+    });
+    updateColors({
+      primaryColor: COLORARRAY[colorIndex],
+      secondaryColor: COLORARRAY[(colorIndex + 1) % COLORARRAY.length],
+      tertiaryColor: COLORARRAY[(colorIndex + 2) % COLORARRAY.length],
+    });
     updateBgSettings({
       roundedCorner: Math.floor(Math.random() * 3),
       borderShadowSettings: Math.floor(Math.random() * 3),
@@ -221,11 +278,11 @@ export const BodyEl = () => {
             bold={titleSettings.bold}
             uppercase={titleSettings.uppercase}
             borderBottom={titleSettings.borderBottom}
-            primaryColor={primaryColor}
+            primaryColor={colors.primaryColor}
             colorText={titleSettings.colorText}
             backgroundColorSettings={titleSettings.backgroundColorSettings}
           >
-            Sales Per Month
+            Bar Graph
           </TitleEl>
           <SVGEl width={WIDTH + 40} height={HEIGHT + 50}>
             <g>
@@ -250,7 +307,7 @@ export const BodyEl = () => {
                 tickStyle={tickSettings.yTickStyle as 0 | 1 | 2 | 3 | 4}
               />
               <Bars
-                primaryColor={primaryColor}
+                primaryColor={colors.primaryColor}
                 roundedCorner={barSettings.roundedCorner as 0 | 1 | 2}
                 barWidth={barSettings.barWidth as 0 | 1 | 2}
                 isXScaleTicksValueRotated={
@@ -337,7 +394,7 @@ export const BodyEl = () => {
               {barSettings.isDataValueVisible ||
               !tickSettings.isYScaleTicksValueVisible ? (
                 <BarValues
-                  primaryColor={primaryColor}
+                  primaryColor={colors.primaryColor}
                   primaryFont={primaryFont}
                   barWidth={barSettings.barWidth as 0 | 1 | 2}
                   isValueColored={barSettings.isValueColored}
@@ -371,7 +428,7 @@ export const BodyEl = () => {
             <LinkEl
               linkColor={subNoteSettings.linkColor as 0 | 1 | 2}
               linkStyle={subNoteSettings.linkStyle as 0 | 1 | 2 | 3}
-              primaryColor={primaryColor}
+              primaryColor={colors.primaryColor}
             >
               www.example.com
             </LinkEl>
@@ -386,11 +443,11 @@ export const BodyEl = () => {
             bold={titleSettings.bold}
             uppercase={titleSettings.uppercase}
             borderBottom={titleSettings.borderBottom}
-            primaryColor={primaryColor}
+            primaryColor={colors.primaryColor}
             colorText={titleSettings.colorText}
             backgroundColorSettings={titleSettings.backgroundColorSettings}
           >
-            Sales Per Month
+            Line Chart
           </TitleEl>
           <SVGEl width={WIDTH + 40} height={HEIGHT + 50}>
             <g transform='translate(0,0)'>
@@ -436,7 +493,7 @@ export const BodyEl = () => {
                 isDashed={tickSettings.yTickStyle === 1 ? true : false}
               />
               <Line
-                primaryColor={primaryColor}
+                primaryColor={colors.primaryColor}
                 primaryFont={primaryFont}
                 isXScaleTicksValueRotated={
                   tickSettings.isXScaleTicksValueRotated
@@ -516,7 +573,174 @@ export const BodyEl = () => {
             <LinkEl
               linkColor={subNoteSettings.linkColor as 0 | 1 | 2}
               linkStyle={subNoteSettings.linkStyle as 0 | 1 | 2 | 3}
-              primaryColor={primaryColor}
+              primaryColor={colors.primaryColor}
+            >
+              www.example.com
+            </LinkEl>
+          </SubNoteEl>
+        </GraphEl>
+        <GraphEl
+          roundedCorner={bgSettings.roundedCorner as 0 | 1 | 2}
+          borderShadowSettings={bgSettings.borderShadowSettings as 0 | 1 | 2}
+        >
+          <TitleEl
+            font={primaryFont}
+            bold={titleSettings.bold}
+            uppercase={titleSettings.uppercase}
+            borderBottom={titleSettings.borderBottom}
+            primaryColor={colors.primaryColor}
+            colorText={titleSettings.colorText}
+            backgroundColorSettings={titleSettings.backgroundColorSettings}
+          >
+            Multiple Line Chart
+          </TitleEl>
+          <KeyContainer
+            position={
+              keySettings.alignment === 0
+                ? 'flex-start'
+                : keySettings.alignment === 1
+                ? 'center'
+                : 'flex-end'
+            }
+          >
+            <KeyEl>
+              <ColorKey fill={colors.primaryColor} />
+              <KeyTitleEl font={primaryFont}>Category 1</KeyTitleEl>
+            </KeyEl>
+            <KeyEl>
+              <ColorKey fill={colors.secondaryColor} />
+              <KeyTitleEl font={primaryFont}>Category 2</KeyTitleEl>
+            </KeyEl>
+            <KeyEl>
+              <ColorKey fill={colors.tertiaryColor} />
+              <KeyTitleEl font={primaryFont}>Category 3</KeyTitleEl>
+            </KeyEl>
+          </KeyContainer>
+          <SVGEl width={WIDTH + 40} height={HEIGHT + 50}>
+            <g transform='translate(0,0)'>
+              <YTicks
+                isXScaleTicksValueRotated={
+                  tickSettings.isXScaleTicksValueRotated
+                }
+                isTicksTitleVisible={tickSettings.isTicksTitleVisible}
+                isYScaleTicksValueVisible={
+                  tickSettings.isYScaleTicksValueVisible
+                }
+                yScaleTicksValueAlignment={
+                  tickSettings.yScaleTicksValueAlignment as 'left' | 'right'
+                }
+                yScaleTicksValuePosition={
+                  tickSettings.yTickStyle === 4
+                    ? 'center'
+                    : (tickSettings.yScaleTicksValuePosition as
+                        | 'top'
+                        | 'center')
+                }
+                tickStyle={tickSettings.yTickStyle as 0 | 1 | 2 | 3 | 4}
+              />
+              <XTicks
+                isXScaleTicksValueRotated={
+                  tickSettings.isXScaleTicksValueRotated
+                }
+                isTicksTitleVisible={tickSettings.isTicksTitleVisible}
+                isYScaleTicksValueVisible={
+                  tickSettings.isYScaleTicksValueVisible
+                }
+                yScaleTicksValueAlignment={
+                  tickSettings.yScaleTicksValueAlignment as 'left' | 'right'
+                }
+                yScaleTicksValuePosition={
+                  tickSettings.yTickStyle === 4
+                    ? 'center'
+                    : (tickSettings.yScaleTicksValuePosition as
+                        | 'top'
+                        | 'center')
+                }
+                tickStyle={tickSettings.xTickStyle as 0 | 1 | 2}
+                isDashed={tickSettings.yTickStyle === 1 ? true : false}
+              />
+              <MultiLine
+                primaryColor={colors.primaryColor}
+                secondaryColor={colors.secondaryColor}
+                tertiaryColor={colors.tertiaryColor}
+                isXScaleTicksValueRotated={
+                  tickSettings.isXScaleTicksValueRotated
+                }
+                isYScaleTicksValueVisible={
+                  tickSettings.isYScaleTicksValueVisible
+                }
+                yScaleTicksValueAlignment={
+                  tickSettings.yScaleTicksValueAlignment as 'left' | 'right'
+                }
+                yScaleTicksValuePosition={
+                  tickSettings.yTickStyle === 4
+                    ? 'center'
+                    : (tickSettings.yScaleTicksValuePosition as
+                        | 'top'
+                        | 'center')
+                }
+                isTicksTitleVisible={tickSettings.isTicksTitleVisible}
+                curveType={lineSettings.curveType as 0 | 1 | 2}
+                isAreaVisible={lineSettings.isAreaVisible}
+                isDataPointVisible={lineSettings.isDataPointVisible}
+              />
+              <YTickValue
+                primaryFont={primaryFont}
+                isXScaleTicksValueRotated={
+                  tickSettings.isXScaleTicksValueRotated
+                }
+                isTicksTitleVisible={tickSettings.isTicksTitleVisible}
+                isYScaleTicksValueVisible={
+                  tickSettings.isYScaleTicksValueVisible
+                }
+                yScaleTicksValueAlignment={
+                  tickSettings.yScaleTicksValueAlignment as 'left' | 'right'
+                }
+                yScaleTicksValuePosition={
+                  tickSettings.yTickStyle === 4
+                    ? 'center'
+                    : (tickSettings.yScaleTicksValuePosition as
+                        | 'top'
+                        | 'center')
+                }
+                color={tickSettings.mode as 'dark' | 'light'}
+                tickStyle={tickSettings.yTickStyle as 0 | 1 | 2 | 3 | 4}
+              />
+              <XTickValue
+                primaryFont={primaryFont}
+                isXScaleTicksValueRotated={
+                  tickSettings.isXScaleTicksValueRotated
+                }
+                isTicksTitleVisible={tickSettings.isTicksTitleVisible}
+                isYScaleTicksValueVisible={
+                  tickSettings.isYScaleTicksValueVisible
+                }
+                yScaleTicksValueAlignment={
+                  tickSettings.yScaleTicksValueAlignment as 'left' | 'right'
+                }
+                yScaleTicksValuePosition={
+                  tickSettings.yTickStyle === 4
+                    ? 'center'
+                    : (tickSettings.yScaleTicksValuePosition as
+                        | 'top'
+                        | 'center')
+                }
+                color={tickSettings.mode as 'dark' | 'light'}
+                barWidth={barSettings.barWidth as 0 | 1 | 2}
+                scaleType={'linear'}
+              />
+            </g>
+          </SVGEl>
+          <SubNoteEl
+            font={primaryFont}
+            textColor={subNoteSettings.textColor as 'light' | 'dark'}
+            alignment={subNoteSettings.alignment as 'left' | 'right'}
+          >
+            Source and data credits:
+            <LinkEl
+              linkColor={subNoteSettings.linkColor as 0 | 1 | 2}
+              linkStyle={subNoteSettings.linkStyle as 0 | 1 | 2 | 3}
+              primaryColor={colors.primaryColor}
             >
               www.example.com
             </LinkEl>

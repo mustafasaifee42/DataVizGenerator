@@ -74,7 +74,7 @@ export const Line = (props: Props) => {
         strokeWidth={2}
       />
       {isAreaVisible ? (
-        <path d={a(DATA as any) as string} fill={primaryColor} opacity='0.4' />
+        <path d={a(DATA as any) as string} fill={primaryColor} opacity='0.3' />
       ) : null}
       {isDataValueVisible ? (
         <>

@@ -34,50 +34,74 @@ export const DATA = [
   {
     month: 'Jan',
     value: 3299,
+    value1: 7880,
+    value2: 9152,
   },
   {
     month: 'Feb',
     value: 1782,
+    value1: 4414,
+    value2: 6278,
   },
   {
     month: 'Mar',
     value: 3284,
+    value1: 6234,
+    value2: 2805,
   },
   {
     month: 'Apr',
     value: 8334,
+    value1: 3033,
+    value2: 8235,
   },
   {
     month: 'May',
     value: 3356,
+    value1: 4979,
+    value2: 2001,
   },
   {
     month: 'Jun',
     value: 4630,
+    value1: 6737,
+    value2: 4427,
   },
   {
     month: 'Jul',
     value: 6526,
+    value1: 9906,
+    value2: 2650,
   },
   {
     month: 'Aug',
     value: 1534,
+    value1: 4536,
+    value2: 5171,
   },
   {
     month: 'Sep',
     value: 7136,
+    value1: 1514,
+    value2: 6421,
   },
   {
     month: 'Oct',
     value: 6061,
+    value1: 6221,
+    value2: 8705,
   },
   {
     month: 'Nov',
     value: 8407,
+    value1: 4374,
+    value2: 3015,
   },
   {
     month: 'Dec',
     value: 4695,
+    value1: 2628,
+    value2: 8008,
   },
 ];
 
