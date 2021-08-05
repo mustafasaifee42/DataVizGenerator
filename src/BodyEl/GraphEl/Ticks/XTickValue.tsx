@@ -12,6 +12,7 @@ interface Props {
   color: 'dark' | 'light';
   barWidth: 0 | 1 | 2;
   scaleType: 'linear' | 'band';
+  isBubbleChart?: boolean;
 }
 
 export const XTickValue = (props: Props) => {
@@ -25,6 +26,7 @@ export const XTickValue = (props: Props) => {
     color,
     primaryFont,
     scaleType,
+    isBubbleChart,
   } = props;
   const margin = getMargin(
     isYScaleTicksValueVisible,
@@ -49,7 +51,8 @@ export const XTickValue = (props: Props) => {
     .paddingOuter(0.2);
   const xScaleLinear = scaleLinear()
     .range([0, graphWidth])
-    .domain([0, DATA.length - 1]);
+    .domain(isBubbleChart ? [0, 10000] : [0, DATA.length - 1]);
+  const bubbleArray = [0, 2000, 4000, 6000, 8000, 10000];
   return (
     <g
       transform={`translate(${
@@ -58,34 +61,69 @@ export const XTickValue = (props: Props) => {
           : margin.left
       },${margin.top})`}
     >
-      {DATA.map((d, i) => {
-        return (
-          <g
-            transform={`translate(${
-              scaleType === 'band'
-                ? (xScale(d.month) as number) + xScale.bandwidth() / 2
-                : xScaleLinear(i)
-            },${
-              isXScaleTicksValueRotated ? graphHeight + 10 : graphHeight + 20
-            })`}
-            key={i}
-          >
-            <text
-              fontFamily={primaryFont}
-              fontSize={14}
-              x={0}
-              y={0}
-              fill={color === 'dark' ? '#666666' : '#AAAAAA'}
-              textAnchor={isXScaleTicksValueRotated ? 'end' : 'middle'}
-              transform={
-                isXScaleTicksValueRotated ? 'rotate(-60)' : 'rotate(0)'
-              }
-            >
-              {d.month}
-            </text>
-          </g>
-        );
-      })}
+      {isBubbleChart ? (
+        <>
+          {bubbleArray.map((d, i) => {
+            return (
+              <g
+                transform={`translate(${xScaleLinear(d)},${
+                  isXScaleTicksValueRotated
+                    ? graphHeight + 10
+                    : graphHeight + 20
+                })`}
+                key={i}
+              >
+                <text
+                  fontFamily={primaryFont}
+                  fontSize={14}
+                  x={0}
+                  y={0}
+                  fill={color === 'dark' ? '#666666' : '#AAAAAA'}
+                  textAnchor={isXScaleTicksValueRotated ? 'end' : 'middle'}
+                  transform={
+                    isXScaleTicksValueRotated ? 'rotate(-60)' : 'rotate(0)'
+                  }
+                >
+                  {d}
+                </text>
+              </g>
+            );
+          })}
+        </>
+      ) : (
+        <>
+          {DATA.map((d, i) => {
+            return (
+              <g
+                transform={`translate(${
+                  scaleType === 'band'
+                    ? (xScale(d.month) as number) + xScale.bandwidth() / 2
+                    : xScaleLinear(i)
+                },${
+                  isXScaleTicksValueRotated
+                    ? graphHeight + 10
+                    : graphHeight + 20
+                })`}
+                key={i}
+              >
+                <text
+                  fontFamily={primaryFont}
+                  fontSize={14}
+                  x={0}
+                  y={0}
+                  fill={color === 'dark' ? '#666666' : '#AAAAAA'}
+                  textAnchor={isXScaleTicksValueRotated ? 'end' : 'middle'}
+                  transform={
+                    isXScaleTicksValueRotated ? 'rotate(-60)' : 'rotate(0)'
+                  }
+                >
+                  {d.month}
+                </text>
+              </g>
+            );
+          })}
+        </>
+      )}
       {isTicksTitleVisible && isYScaleTicksValueVisible ? (
         <text
           fontFamily={primaryFont}
@@ -96,7 +134,7 @@ export const XTickValue = (props: Props) => {
           textAnchor='middle'
           fill={color === 'dark' ? '#333333' : '#999999'}
         >
-          Months of the Year
+          {isBubbleChart ? 'Production Value' : 'Months of the Year'}
         </text>
       ) : null}
     </g>

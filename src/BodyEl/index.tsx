@@ -7,6 +7,7 @@ import { YTickValue } from './GraphEl/Ticks/YTickValue';
 import { XTickValue } from './GraphEl/Ticks/XTickValue';
 import { Bars } from './GraphEl/BarGraph/Bars';
 import { Line } from './GraphEl/LineChart/Line';
+import { BubbleChart } from './GraphEl/BubbleChart/BubbleChart';
 import { MultiLine } from './GraphEl/LineChart/MultiLine';
 import { BarValues } from './GraphEl/BarGraph/BarValues';
 
@@ -30,7 +31,7 @@ const GraphContainer = styled.div`
 const GraphEl = styled.div<GraphCSSSettingsProps>`
   width: fit-content;
   background-color: #ffffff;
-  margin: 25px;
+  margin: 15px;
   border-radius: ${props => `${5 * props.roundedCorner}px`};
   border: ${props =>
     props.borderShadowSettings === 1 ? '1px solid #dadada' : '0'};
@@ -469,7 +470,7 @@ export const BodyEl = () => {
                         | 'top'
                         | 'center')
                 }
-                tickStyle={tickSettings.yTickStyle as 0 | 1 | 2 | 3 | 4}
+                tickStyle={(tickSettings.yTickStyle % 4) as 0 | 1 | 2 | 3}
               />
               <XTicks
                 isXScaleTicksValueRotated={
@@ -537,7 +538,7 @@ export const BodyEl = () => {
                         | 'center')
                 }
                 color={tickSettings.mode as 'dark' | 'light'}
-                tickStyle={tickSettings.yTickStyle as 0 | 1 | 2 | 3 | 4}
+                tickStyle={(tickSettings.yTickStyle % 4) as 0 | 1 | 2 | 3}
               />
               <XTickValue
                 primaryFont={primaryFont}
@@ -636,7 +637,7 @@ export const BodyEl = () => {
                         | 'top'
                         | 'center')
                 }
-                tickStyle={tickSettings.yTickStyle as 0 | 1 | 2 | 3 | 4}
+                tickStyle={(tickSettings.yTickStyle % 4) as 0 | 1 | 2 | 3}
               />
               <XTicks
                 isXScaleTicksValueRotated={
@@ -704,7 +705,7 @@ export const BodyEl = () => {
                         | 'center')
                 }
                 color={tickSettings.mode as 'dark' | 'light'}
-                tickStyle={tickSettings.yTickStyle as 0 | 1 | 2 | 3 | 4}
+                tickStyle={(tickSettings.yTickStyle % 4) as 0 | 1 | 2 | 3}
               />
               <XTickValue
                 primaryFont={primaryFont}
@@ -728,6 +729,174 @@ export const BodyEl = () => {
                 color={tickSettings.mode as 'dark' | 'light'}
                 barWidth={barSettings.barWidth as 0 | 1 | 2}
                 scaleType={'linear'}
+              />
+            </g>
+          </SVGEl>
+          <SubNoteEl
+            font={primaryFont}
+            textColor={subNoteSettings.textColor as 'light' | 'dark'}
+            alignment={subNoteSettings.alignment as 'left' | 'right'}
+          >
+            Source and data credits:
+            <LinkEl
+              linkColor={subNoteSettings.linkColor as 0 | 1 | 2}
+              linkStyle={subNoteSettings.linkStyle as 0 | 1 | 2 | 3}
+              primaryColor={colors.primaryColor}
+            >
+              www.example.com
+            </LinkEl>
+          </SubNoteEl>
+        </GraphEl>
+        <GraphEl
+          roundedCorner={bgSettings.roundedCorner as 0 | 1 | 2}
+          borderShadowSettings={bgSettings.borderShadowSettings as 0 | 1 | 2}
+        >
+          <TitleEl
+            font={primaryFont}
+            bold={titleSettings.bold}
+            uppercase={titleSettings.uppercase}
+            borderBottom={titleSettings.borderBottom}
+            primaryColor={colors.primaryColor}
+            colorText={titleSettings.colorText}
+            backgroundColorSettings={titleSettings.backgroundColorSettings}
+          >
+            Bubble Chart
+          </TitleEl>
+          <KeyContainer
+            position={
+              keySettings.alignment === 0
+                ? 'flex-start'
+                : keySettings.alignment === 1
+                ? 'center'
+                : 'flex-end'
+            }
+          >
+            <KeyEl>
+              <ColorKey fill={colors.primaryColor} />
+              <KeyTitleEl font={primaryFont}>Category 1</KeyTitleEl>
+            </KeyEl>
+            <KeyEl>
+              <ColorKey fill={colors.secondaryColor} />
+              <KeyTitleEl font={primaryFont}>Category 2</KeyTitleEl>
+            </KeyEl>
+            <KeyEl>
+              <ColorKey fill={colors.tertiaryColor} />
+              <KeyTitleEl font={primaryFont}>Category 3</KeyTitleEl>
+            </KeyEl>
+          </KeyContainer>
+          <SVGEl width={WIDTH + 40} height={HEIGHT + 50}>
+            <g transform='translate(0,0)'>
+              <YTicks
+                isXScaleTicksValueRotated={
+                  tickSettings.isXScaleTicksValueRotated
+                }
+                isTicksTitleVisible={tickSettings.isTicksTitleVisible}
+                isYScaleTicksValueVisible={
+                  tickSettings.isYScaleTicksValueVisible
+                }
+                yScaleTicksValueAlignment={
+                  tickSettings.yScaleTicksValueAlignment as 'left' | 'right'
+                }
+                yScaleTicksValuePosition={
+                  tickSettings.yTickStyle === 4
+                    ? 'center'
+                    : (tickSettings.yScaleTicksValuePosition as
+                        | 'top'
+                        | 'center')
+                }
+                tickStyle={(tickSettings.yTickStyle % 4) as 0 | 1 | 2 | 3}
+              />
+              <XTicks
+                isXScaleTicksValueRotated={
+                  tickSettings.isXScaleTicksValueRotated
+                }
+                isTicksTitleVisible={tickSettings.isTicksTitleVisible}
+                isYScaleTicksValueVisible={
+                  tickSettings.isYScaleTicksValueVisible
+                }
+                yScaleTicksValueAlignment={
+                  tickSettings.yScaleTicksValueAlignment as 'left' | 'right'
+                }
+                yScaleTicksValuePosition={
+                  tickSettings.yTickStyle === 4
+                    ? 'center'
+                    : (tickSettings.yScaleTicksValuePosition as
+                        | 'top'
+                        | 'center')
+                }
+                tickStyle={tickSettings.xTickStyle as 0 | 1 | 2}
+                isDashed={tickSettings.yTickStyle === 1 ? true : false}
+                isBubbleChart={true}
+              />
+              <BubbleChart
+                primaryColor={colors.primaryColor}
+                secondaryColor={colors.secondaryColor}
+                tertiaryColor={colors.tertiaryColor}
+                primaryFont={primaryFont}
+                isXScaleTicksValueRotated={
+                  tickSettings.isXScaleTicksValueRotated
+                }
+                isYScaleTicksValueVisible={
+                  tickSettings.isYScaleTicksValueVisible
+                }
+                yScaleTicksValueAlignment={
+                  tickSettings.yScaleTicksValueAlignment as 'left' | 'right'
+                }
+                yScaleTicksValuePosition={
+                  tickSettings.yTickStyle === 4
+                    ? 'center'
+                    : (tickSettings.yScaleTicksValuePosition as
+                        | 'top'
+                        | 'center')
+                }
+                isTicksTitleVisible={tickSettings.isTicksTitleVisible}
+                isDataPointVisible={lineSettings.isDataPointVisible}
+              />
+              <YTickValue
+                primaryFont={primaryFont}
+                isXScaleTicksValueRotated={
+                  tickSettings.isXScaleTicksValueRotated
+                }
+                isTicksTitleVisible={tickSettings.isTicksTitleVisible}
+                isYScaleTicksValueVisible={
+                  tickSettings.isYScaleTicksValueVisible
+                }
+                yScaleTicksValueAlignment={
+                  tickSettings.yScaleTicksValueAlignment as 'left' | 'right'
+                }
+                yScaleTicksValuePosition={
+                  tickSettings.yTickStyle === 4
+                    ? 'center'
+                    : (tickSettings.yScaleTicksValuePosition as
+                        | 'top'
+                        | 'center')
+                }
+                color={tickSettings.mode as 'dark' | 'light'}
+                tickStyle={(tickSettings.yTickStyle % 4) as 0 | 1 | 2 | 3}
+              />
+              <XTickValue
+                primaryFont={primaryFont}
+                isXScaleTicksValueRotated={
+                  tickSettings.isXScaleTicksValueRotated
+                }
+                isTicksTitleVisible={tickSettings.isTicksTitleVisible}
+                isYScaleTicksValueVisible={
+                  tickSettings.isYScaleTicksValueVisible
+                }
+                yScaleTicksValueAlignment={
+                  tickSettings.yScaleTicksValueAlignment as 'left' | 'right'
+                }
+                yScaleTicksValuePosition={
+                  tickSettings.yTickStyle === 4
+                    ? 'center'
+                    : (tickSettings.yScaleTicksValuePosition as
+                        | 'top'
+                        | 'center')
+                }
+                color={tickSettings.mode as 'dark' | 'light'}
+                barWidth={barSettings.barWidth as 0 | 1 | 2}
+                scaleType={'linear'}
+                isBubbleChart={true}
               />
             </g>
           </SVGEl>

@@ -10,6 +10,7 @@ interface Props {
   yScaleTicksValuePosition: 'top' | 'center';
   tickStyle: 0 | 1 | 2;
   isDashed: boolean;
+  isBubbleChart?: boolean;
 }
 
 export const XTicks = (props: Props) => {
@@ -21,6 +22,7 @@ export const XTicks = (props: Props) => {
     isTicksTitleVisible,
     tickStyle,
     isDashed,
+    isBubbleChart,
   } = props;
   const margin = getMargin(
     isYScaleTicksValueVisible,
@@ -31,30 +33,58 @@ export const XTicks = (props: Props) => {
   );
   const graphHeight = HEIGHT - margin.top - margin.bottom;
   const graphWidth = WIDTH - margin.left - margin.right;
-  const xScale = scaleLinear().range([0, graphWidth]).domain([0, 11]);
+  const xScale = scaleLinear()
+    .range([0, graphWidth])
+    .domain(isBubbleChart ? [0, 10000] : [0, 11]);
+  const bubbleArray = [0, 2000, 4000, 6000, 8000, 10000];
   return (
     <>
       {tickStyle !== 0 ? (
         <g transform={`translate(${margin.left},${margin.top})`}>
-          {DATA.map((_d, i) =>
-            i % 2 === 0 ? (
-              <line
-                x1={xScale(i)}
-                y1={tickStyle === 1 ? graphHeight + 5 : 0}
-                x2={xScale(i)}
-                y2={graphHeight}
-                stroke={
-                  tickStyle === 2 && isDashed
-                    ? '#AAAAAA'
-                    : tickStyle === 1
-                    ? '#666666'
-                    : '#DDDDDD'
-                }
-                strokeWidth={1}
-                strokeDasharray={tickStyle === 2 && isDashed ? '8' : '0'}
-                key={i}
-              />
-            ) : null,
+          {isBubbleChart ? (
+            <>
+              {bubbleArray.map((d, i) => (
+                <line
+                  x1={xScale(d)}
+                  y1={tickStyle === 1 ? graphHeight + 5 : 0}
+                  x2={xScale(d)}
+                  y2={graphHeight}
+                  stroke={
+                    tickStyle === 2 && isDashed
+                      ? '#AAAAAA'
+                      : tickStyle === 1
+                      ? '#666666'
+                      : '#DDDDDD'
+                  }
+                  strokeWidth={1}
+                  strokeDasharray={tickStyle === 2 && isDashed ? '8' : '0'}
+                  key={i}
+                />
+              ))}
+            </>
+          ) : (
+            <>
+              {DATA.map((_d, i) =>
+                i % 2 === 0 ? (
+                  <line
+                    x1={xScale(i)}
+                    y1={tickStyle === 1 ? graphHeight + 5 : 0}
+                    x2={xScale(i)}
+                    y2={graphHeight}
+                    stroke={
+                      tickStyle === 2 && isDashed
+                        ? '#AAAAAA'
+                        : tickStyle === 1
+                        ? '#666666'
+                        : '#DDDDDD'
+                    }
+                    strokeWidth={1}
+                    strokeDasharray={tickStyle === 2 && isDashed ? '8' : '0'}
+                    key={i}
+                  />
+                ) : null,
+              )}
+            </>
           )}
         </g>
       ) : null}
