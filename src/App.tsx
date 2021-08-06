@@ -123,6 +123,7 @@ const AboutButton = styled.button`
 
 const Footer = styled.div`
   position: fixed;
+  cursor: pointer;
   bottom: 0;
   padding: 10px;
   font-size: 12px;
@@ -137,6 +138,7 @@ ReactGA.pageview('/');
 
 function App() {
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [showFooter, setShowFooter] = useState(true);
 
   const closeModal = () => {
     setIsOpen(false);
@@ -157,7 +159,15 @@ function App() {
         </AboutButton>
       </header>
       <BodyEl />
-      <Footer>DataVizBot uses cookies to track analytics</Footer>
+      {showFooter ? (
+        <Footer
+          onClick={() => {
+            setShowFooter(false);
+          }}
+        >
+          DataVizBot uses cookies to track analytics. Click to hide.
+        </Footer>
+      ) : null}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
