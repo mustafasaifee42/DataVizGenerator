@@ -79,10 +79,10 @@ export const Line = (props: Props) => {
       {isDataValueVisible ? (
         <>
           {DATA.map((d, i) => (
-            <g key={i}>
+            <g key={i} transform={`translate(${xScale(i)},${yScale(d.value)})`}>
               <rect
-                x={xScale(i) - 20}
-                y={yScale(d.value) - 20}
+                x={-20}
+                y={isDataPointVisible ? -25 : -13}
                 width={40}
                 height={20}
                 fill='#FFF'
@@ -92,9 +92,9 @@ export const Line = (props: Props) => {
               />
               <text
                 fontFamily={primaryFont}
-                x={xScale(i)}
-                y={yScale(d.value)}
-                dy={-5}
+                x={0}
+                y={0}
+                dy={isDataPointVisible ? -10 : 3}
                 fill={'#666666'}
                 fontSize={14}
                 fontWeight='700'

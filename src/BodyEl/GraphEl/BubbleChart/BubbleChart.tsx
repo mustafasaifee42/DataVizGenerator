@@ -43,9 +43,8 @@ export const BubbleChart = (props: Props) => {
   return (
     <g transform={`translate(${margin.left},${margin.top})`}>
       {DATA.map((d, i) => (
-        <g>
+        <g key={i}>
           <circle
-            key={i}
             cx={xScale(d.value)}
             cy={yScale(d.value1)}
             r={rScale(d.value2)}

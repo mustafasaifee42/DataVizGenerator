@@ -14,7 +14,7 @@ import { BarValues } from './GraphEl/BarGraph/BarValues';
 const ButtonDiv = styled.div`
   display: flex;
   justify-content: center;
-  margin: 50px 0;
+  margin: 40px 0 20px 0;
 `;
 
 interface GraphCSSSettingsProps {
@@ -57,18 +57,25 @@ interface TitleElSettings {
 
 const TitleEl = styled.h1<TitleElSettings>`
   margin: 0;
-  padding: 25px;
+  padding: ${props =>
+    props.borderBottom || props.backgroundColorSettings
+      ? '25px'
+      : '25px 25px 0 25px'};
   font-family: ${props => props.font};
   font-weight: ${props => (props.bold ? '700' : '500')};
   text-transform: ${props => (props.uppercase ? 'uppercase' : 'none')};
   border-bottom: ${props => (props.borderBottom ? '1px solid #DDDDDD' : '0')};
   color: ${props => (props.colorText ? props.primaryColor : 'inherit')};
   background-color: ${props =>
-    props.backgroundColorSettings ? '#FAFAFA' : 'none'};
+    props.backgroundColorSettings ? '#FAFAFA' : 'transparent'};
 `;
 
-const SVGEl = styled.svg`
-  padding: 20px;
+interface SvgProps {
+  noTopPadding?: boolean;
+}
+
+const SVGEl = styled.svg<SvgProps>`
+  padding: ${props => (props.noTopPadding ? '0 20px 20px 20px' : '20px')};
 `;
 
 interface SubNoteElSettings {
@@ -109,18 +116,52 @@ const LinkEl = styled.span<LinkElSettings>`
 
 interface KeyContainerAlignment {
   position: 'flex-start' | 'flex-end' | 'center';
+  isOverlap: boolean;
 }
 
 const KeyContainer = styled.div<KeyContainerAlignment>`
   display: flex;
-  justify-content: ${props => props.position};
-  margin-top: 15px;
-  padding: 0 25px;
+  width: fit-content;
+  margin: ${props =>
+    props.position === 'flex-end'
+      ? '25px 0 0 auto'
+      : props.position === 'center'
+      ? '25px auto 0 auto'
+      : 0};
+  margin-top: 25px;
+  padding: 5px 10px;
+  margin-bottom: ${props =>
+    props.position !== 'flex-start' && props.isOverlap ? '-26px' : 0};
+  background-color: ${props =>
+    props.position !== 'flex-start' && props.isOverlap
+      ? 'rgba(250, 250, 250, 0.8)'
+      : 'transparent'};
+`;
+
+const KeyContainerNoFlex = styled.div<KeyContainerAlignment>`
+  width: fit-content;
+  margin: 25px 20px 0 auto;
+  padding: 5px 10px;
+  margin-bottom: -85px;
+  background-color: rgba(250, 250, 250, 0.8);
+  border: 1px solid #eee;
+`;
+
+const KeyElNoFlex = styled.div`
+  display: flex;
+  margin: 10px 0;
+  align-items: center;
+  &:first-of-type {
+    margin-top: 0;
+  }
+  &:last-of-type {
+    margin-bottom: 0;
+  }
 `;
 
 const KeyEl = styled.div`
   display: flex;
-  margin: 10px;
+  margin: 0 7px;
   align-items: center;
   &:first-of-type {
     margin-left: 0;
@@ -136,8 +177,8 @@ interface ColorKeyProps {
 
 const ColorKey = styled.div<ColorKeyProps>`
   background-color: ${props => props.fill};
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   margin-right: 5px;
   border-radius: 2px;
 `;
@@ -146,15 +187,23 @@ interface KeyTitleElProps {
   font: string;
 }
 const KeyTitleEl = styled.div<KeyTitleElProps>`
-  font-family: ${props => props.font}
-  font-size: 12px;
+  font-family: ${props => props.font};
+  font-size: 14px;
   color: #999999;
+`;
+
+const KeyDiv = styled.div`
+  position: relative;
+  padding: 0 25px;
+  z-index: 1000;
 `;
 
 export const BodyEl = () => {
   const colorIndex = Math.floor(Math.random() * COLORARRAY.length);
   const [keySettings, updateKeySettings] = useState({
     alignment: Math.floor(Math.random() * 3),
+    isOverlap: Math.random() > 0.5 ? true : false,
+    isKeyVerticle: Math.random() > 0.5 ? true : false,
   });
   const [primaryFont, updatePrimaryFont] = useState(
     FONTSARRAY[Math.floor(Math.random() * FONTSARRAY.length)],
@@ -211,6 +260,8 @@ export const BodyEl = () => {
     );
     updateKeySettings({
       alignment: Math.floor(Math.random() * 3),
+      isOverlap: Math.random() > 0.5 ? true : false,
+      isKeyVerticle: Math.random() > 0.5 ? true : false,
     });
     updateColors({
       primaryColor: COLORARRAY[colorIndex],
@@ -266,7 +317,7 @@ export const BodyEl = () => {
             updatesSettings();
           }}
         >
-          Style Again
+          Style Again 🔁
         </button>
       </ButtonDiv>
       <GraphContainer>
@@ -595,29 +646,54 @@ export const BodyEl = () => {
           >
             Multiple Line Chart
           </TitleEl>
-          <KeyContainer
-            position={
-              keySettings.alignment === 0
-                ? 'flex-start'
-                : keySettings.alignment === 1
-                ? 'center'
-                : 'flex-end'
-            }
-          >
-            <KeyEl>
-              <ColorKey fill={colors.primaryColor} />
-              <KeyTitleEl font={primaryFont}>Category 1</KeyTitleEl>
-            </KeyEl>
-            <KeyEl>
-              <ColorKey fill={colors.secondaryColor} />
-              <KeyTitleEl font={primaryFont}>Category 2</KeyTitleEl>
-            </KeyEl>
-            <KeyEl>
-              <ColorKey fill={colors.tertiaryColor} />
-              <KeyTitleEl font={primaryFont}>Category 3</KeyTitleEl>
-            </KeyEl>
-          </KeyContainer>
-          <SVGEl width={WIDTH + 40} height={HEIGHT + 50}>
+          {keySettings.isKeyVerticle && keySettings.alignment === 2 ? (
+            <KeyDiv>
+              <KeyContainerNoFlex
+                position={'flex-end'}
+                isOverlap={keySettings.isOverlap}
+              >
+                <KeyElNoFlex>
+                  <ColorKey fill={colors.primaryColor} />
+                  <KeyTitleEl font={primaryFont}>Category 1</KeyTitleEl>
+                </KeyElNoFlex>
+                <KeyElNoFlex>
+                  <ColorKey fill={colors.secondaryColor} />
+                  <KeyTitleEl font={primaryFont}>Category 2</KeyTitleEl>
+                </KeyElNoFlex>
+                <KeyElNoFlex>
+                  <ColorKey fill={colors.tertiaryColor} />
+                  <KeyTitleEl font={primaryFont}>Category 3</KeyTitleEl>
+                </KeyElNoFlex>
+              </KeyContainerNoFlex>
+            </KeyDiv>
+          ) : (
+            <KeyDiv>
+              <KeyContainer
+                position={
+                  keySettings.alignment === 0
+                    ? 'flex-start'
+                    : keySettings.alignment === 1
+                    ? 'center'
+                    : 'flex-end'
+                }
+                isOverlap={keySettings.isOverlap}
+              >
+                <KeyEl>
+                  <ColorKey fill={colors.primaryColor} />
+                  <KeyTitleEl font={primaryFont}>Category 1</KeyTitleEl>
+                </KeyEl>
+                <KeyEl>
+                  <ColorKey fill={colors.secondaryColor} />
+                  <KeyTitleEl font={primaryFont}>Category 2</KeyTitleEl>
+                </KeyEl>
+                <KeyEl>
+                  <ColorKey fill={colors.tertiaryColor} />
+                  <KeyTitleEl font={primaryFont}>Category 3</KeyTitleEl>
+                </KeyEl>
+              </KeyContainer>
+            </KeyDiv>
+          )}
+          <SVGEl noTopPadding={true} width={WIDTH + 40} height={HEIGHT + 30}>
             <g transform='translate(0,0)'>
               <YTicks
                 isXScaleTicksValueRotated={
@@ -762,38 +838,64 @@ export const BodyEl = () => {
           >
             Bubble Chart
           </TitleEl>
-          <KeyContainer
-            position={
-              keySettings.alignment === 0
-                ? 'flex-start'
-                : keySettings.alignment === 1
-                ? 'center'
-                : 'flex-end'
-            }
-          >
-            <KeyEl>
-              <ColorKey fill={colors.primaryColor} />
-              <KeyTitleEl font={primaryFont}>Category 1</KeyTitleEl>
-            </KeyEl>
-            <KeyEl>
-              <ColorKey fill={colors.secondaryColor} />
-              <KeyTitleEl font={primaryFont}>Category 2</KeyTitleEl>
-            </KeyEl>
-            <KeyEl>
-              <ColorKey fill={colors.tertiaryColor} />
-              <KeyTitleEl font={primaryFont}>Category 3</KeyTitleEl>
-            </KeyEl>
-          </KeyContainer>
-          <SVGEl width={WIDTH + 40} height={HEIGHT + 50}>
+          {keySettings.isKeyVerticle && keySettings.alignment === 2 ? (
+            <KeyDiv>
+              <KeyContainerNoFlex
+                position={'flex-end'}
+                isOverlap={keySettings.isOverlap}
+              >
+                <KeyElNoFlex>
+                  <ColorKey fill={colors.primaryColor} />
+                  <KeyTitleEl font={primaryFont}>Category 1</KeyTitleEl>
+                </KeyElNoFlex>
+                <KeyElNoFlex>
+                  <ColorKey fill={colors.secondaryColor} />
+                  <KeyTitleEl font={primaryFont}>Category 2</KeyTitleEl>
+                </KeyElNoFlex>
+                <KeyElNoFlex>
+                  <ColorKey fill={colors.tertiaryColor} />
+                  <KeyTitleEl font={primaryFont}>Category 3</KeyTitleEl>
+                </KeyElNoFlex>
+              </KeyContainerNoFlex>
+            </KeyDiv>
+          ) : (
+            <KeyDiv>
+              <KeyContainer
+                position={
+                  keySettings.alignment === 0
+                    ? 'flex-start'
+                    : keySettings.alignment === 1
+                    ? 'center'
+                    : 'flex-end'
+                }
+                isOverlap={keySettings.isOverlap}
+              >
+                <KeyEl>
+                  <ColorKey fill={colors.primaryColor} />
+                  <KeyTitleEl font={primaryFont}>Category 1</KeyTitleEl>
+                </KeyEl>
+                <KeyEl>
+                  <ColorKey fill={colors.secondaryColor} />
+                  <KeyTitleEl font={primaryFont}>Category 2</KeyTitleEl>
+                </KeyEl>
+                <KeyEl>
+                  <ColorKey fill={colors.tertiaryColor} />
+                  <KeyTitleEl font={primaryFont}>Category 3</KeyTitleEl>
+                </KeyEl>
+              </KeyContainer>
+            </KeyDiv>
+          )}
+          <SVGEl noTopPadding={true} width={WIDTH + 40} height={HEIGHT + 30}>
             <g transform='translate(0,0)'>
               <YTicks
                 isXScaleTicksValueRotated={
                   tickSettings.isXScaleTicksValueRotated
                 }
-                isTicksTitleVisible={tickSettings.isTicksTitleVisible}
-                isYScaleTicksValueVisible={
+                isTicksTitleVisible={
+                  tickSettings.isTicksTitleVisible &&
                   tickSettings.isYScaleTicksValueVisible
                 }
+                isYScaleTicksValueVisible={true}
                 yScaleTicksValueAlignment={
                   tickSettings.yScaleTicksValueAlignment as 'left' | 'right'
                 }
@@ -810,10 +912,11 @@ export const BodyEl = () => {
                 isXScaleTicksValueRotated={
                   tickSettings.isXScaleTicksValueRotated
                 }
-                isTicksTitleVisible={tickSettings.isTicksTitleVisible}
-                isYScaleTicksValueVisible={
+                isTicksTitleVisible={
+                  tickSettings.isTicksTitleVisible &&
                   tickSettings.isYScaleTicksValueVisible
                 }
+                isYScaleTicksValueVisible={true}
                 yScaleTicksValueAlignment={
                   tickSettings.yScaleTicksValueAlignment as 'left' | 'right'
                 }
@@ -857,10 +960,11 @@ export const BodyEl = () => {
                 isXScaleTicksValueRotated={
                   tickSettings.isXScaleTicksValueRotated
                 }
-                isTicksTitleVisible={tickSettings.isTicksTitleVisible}
-                isYScaleTicksValueVisible={
+                isTicksTitleVisible={
+                  tickSettings.isTicksTitleVisible &&
                   tickSettings.isYScaleTicksValueVisible
                 }
+                isYScaleTicksValueVisible={true}
                 yScaleTicksValueAlignment={
                   tickSettings.yScaleTicksValueAlignment as 'left' | 'right'
                 }
@@ -879,10 +983,11 @@ export const BodyEl = () => {
                 isXScaleTicksValueRotated={
                   tickSettings.isXScaleTicksValueRotated
                 }
-                isTicksTitleVisible={tickSettings.isTicksTitleVisible}
-                isYScaleTicksValueVisible={
+                isTicksTitleVisible={
+                  tickSettings.isTicksTitleVisible &&
                   tickSettings.isYScaleTicksValueVisible
                 }
+                isYScaleTicksValueVisible={true}
                 yScaleTicksValueAlignment={
                   tickSettings.yScaleTicksValueAlignment as 'left' | 'right'
                 }
