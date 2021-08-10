@@ -1,6 +1,6 @@
 {
-  "short_name": "DataVizBot",
-  "name": "Algorithm-driven design tool for graphs",
+  "short_name": "DashboardBot",
+  "name": "DashboardBotAlgorithm-driven design tool for dashboard",
   "icons": [
     {
       "src": "favicon.png",

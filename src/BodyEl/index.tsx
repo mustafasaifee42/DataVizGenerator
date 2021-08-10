@@ -376,6 +376,7 @@ const ProfileElSideLarge = styled.div<Mode>`
   border-top: 1px solid ${props => (props.darkMode ? '#666' : '#CCC')};
   font-weight: 700;
   width: 100%;
+  color: ${props => (props.darkMode ? '#999' : '#333')};
   img {
     margin-right: 10px;
   }
@@ -1065,7 +1066,7 @@ export const BodyEl = () => {
                       fontSize: titleSettings.valueFontSizeLarge
                         ? '20px'
                         : '16px',
-                      fontWeight: 500,
+                      fontWeight: 400,
                     }}
                   >
                     {' '}
@@ -1113,7 +1114,7 @@ export const BodyEl = () => {
                       fontSize: titleSettings.valueFontSizeLarge
                         ? '20px'
                         : '16px',
-                      fontWeight: 500,
+                      fontWeight: 400,
                     }}
                   >
                     {' '}

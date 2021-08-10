@@ -149,7 +149,7 @@ function App() {
       <GlobalStyle />
       <header>
         <TitleDiv>
-          <span className='bold'>DataViz</span>Bot
+          <span className='bold'>Dashboard</span>Bot
         </TitleDiv>
         <AboutButton
           onClick={() => {
@@ -166,7 +166,7 @@ function App() {
             setShowFooter(false);
           }}
         >
-          DataVizBot uses cookies to track analytics. Click to hide.
+          DashboardBot uses cookies to track analytics. Click to hide.
         </Footer>
       ) : null}
       <Modal
@@ -178,17 +178,17 @@ function App() {
         overlayClassName={'overlay'}
       >
         <ModalHeading>
-          <h2>About DataVizBot</h2>
+          <h2>About DashboardBot</h2>
         </ModalHeading>
         <ModalContent>
-          DataVizBot is an algorithm-driven design tool applied to data
-          visualization. It generates variations of designs for different
-          graphs.
+          DashboardBot is an algorithm-driven design tool applied to data
+          visualization. It generates variations of designs for dashboard and
+          different graphs.
           <br />
           <br />
           <span className='bold'>Inspiration</span>
           <br />
-          DataVizBot is inspired by{' '}
+          DashboardBot is inspired by{' '}
           <a
             href='https://www.uibot.app/'
             target='_blank'
@@ -209,7 +209,7 @@ function App() {
           <br />
           <span className='bold'>Implementation</span>
           <br />
-          DataVizBot is built using{' '}
+          DashboardBot is built using{' '}
           <a
             href='https://reactjs.org/'
             target='_blank'
