@@ -1,4 +1,4 @@
-import { DATA, HEIGHT, WIDTH } from '../../Constants';
+import { DATA } from '../../Constants';
 import { scaleLinear } from 'd3-scale';
 import { getMargin } from '../../Utils';
 
@@ -11,6 +11,9 @@ interface Props {
   tickStyle: 0 | 1 | 2;
   isDashed: boolean;
   isBubbleChart?: boolean;
+  width: number;
+  height: number;
+  darkMode: boolean;
 }
 
 export const XTicks = (props: Props) => {
@@ -23,6 +26,9 @@ export const XTicks = (props: Props) => {
     tickStyle,
     isDashed,
     isBubbleChart,
+    width,
+    height,
+    darkMode,
   } = props;
   const margin = getMargin(
     isYScaleTicksValueVisible,
@@ -31,8 +37,8 @@ export const XTicks = (props: Props) => {
     yScaleTicksValueAlignment,
     isXScaleTicksValueRotated,
   );
-  const graphHeight = HEIGHT - margin.top - margin.bottom;
-  const graphWidth = WIDTH - margin.left - margin.right;
+  const graphHeight = height - margin.top - margin.bottom;
+  const graphWidth = width - margin.left - margin.right;
   const xScale = scaleLinear()
     .range([0, graphWidth])
     .domain(isBubbleChart ? [0, 10000] : [0, 11]);
@@ -59,6 +65,7 @@ export const XTicks = (props: Props) => {
                   strokeWidth={1}
                   strokeDasharray={tickStyle === 2 && isDashed ? '8' : '0'}
                   key={i}
+                  opacity={darkMode ? 0.3 : 1}
                 />
               ))}
             </>
@@ -81,6 +88,7 @@ export const XTicks = (props: Props) => {
                     strokeWidth={1}
                     strokeDasharray={tickStyle === 2 && isDashed ? '8' : '0'}
                     key={i}
+                    opacity={darkMode ? 0.3 : 1}
                   />
                 ) : null,
               )}

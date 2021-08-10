@@ -54,8 +54,8 @@ export const getBottomMarginValue = (
   const titleOffset =
     isTickTitleVisible && isTickValueVisible ? TICKTITLEHEIGHT : 0;
   const graphHeight = isXScaleTicksValueRotated
-    ? 30 + titleOffset
-    : 20 + titleOffset;
+    ? 37 + titleOffset
+    : 27 + titleOffset;
   return graphHeight;
 };
 

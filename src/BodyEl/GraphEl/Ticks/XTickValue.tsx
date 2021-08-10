@@ -1,4 +1,4 @@
-import { DATA, HEIGHT, WIDTH, BARSMARGINSIDE } from '../../Constants';
+import { DATA, BARSMARGINSIDE } from '../../Constants';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { getMargin } from '../../Utils';
 
@@ -13,6 +13,9 @@ interface Props {
   barWidth: 0 | 1 | 2;
   scaleType: 'linear' | 'band';
   isBubbleChart?: boolean;
+  width: number;
+  height: number;
+  darkMode: boolean;
 }
 
 export const XTickValue = (props: Props) => {
@@ -27,6 +30,9 @@ export const XTickValue = (props: Props) => {
     primaryFont,
     scaleType,
     isBubbleChart,
+    width,
+    height,
+    darkMode,
   } = props;
   const margin = getMargin(
     isYScaleTicksValueVisible,
@@ -41,14 +47,14 @@ export const XTickValue = (props: Props) => {
     yScaleTicksValuePosition === 'top'
       ? BARSMARGINSIDE
       : 0;
-  const graphHeight = HEIGHT - margin.top - margin.bottom;
-  const graphWidth = WIDTH - margin.left - margin.right - barsOffset;
+  const graphHeight = height - margin.top - margin.bottom;
+  const graphWidth = width - margin.left - margin.right - barsOffset;
   const paddingInner = barWidth === 0 ? 0.1 : barWidth === 1 ? 0.25 : 0.5;
   const xScale = scaleBand()
     .range([0, graphWidth])
     .domain(DATA.map(d => d.month))
     .paddingInner(paddingInner)
-    .paddingOuter(0.2);
+    .paddingOuter(isYScaleTicksValueVisible ? 0.2 : 0);
   const xScaleLinear = scaleLinear()
     .range([0, graphWidth])
     .domain(isBubbleChart ? [0, 10000] : [0, DATA.length - 1]);
@@ -78,7 +84,10 @@ export const XTickValue = (props: Props) => {
                   fontSize={14}
                   x={0}
                   y={0}
-                  fill={color === 'dark' ? '#666666' : '#AAAAAA'}
+                  fill={
+                    darkMode ? '#FFF' : color === 'dark' ? '#666666' : '#AAAAAA'
+                  }
+                  opacity={darkMode ? (color === 'dark' ? 0.6 : 0.4) : 1}
                   textAnchor={isXScaleTicksValueRotated ? 'end' : 'middle'}
                   transform={
                     isXScaleTicksValueRotated ? 'rotate(-60)' : 'rotate(0)'
@@ -111,7 +120,10 @@ export const XTickValue = (props: Props) => {
                   fontSize={14}
                   x={0}
                   y={0}
-                  fill={color === 'dark' ? '#666666' : '#AAAAAA'}
+                  fill={
+                    darkMode ? '#FFF' : color === 'dark' ? '#666666' : '#AAAAAA'
+                  }
+                  opacity={darkMode ? (color === 'dark' ? 0.6 : 0.4) : 1}
                   textAnchor={isXScaleTicksValueRotated ? 'end' : 'middle'}
                   transform={
                     isXScaleTicksValueRotated ? 'rotate(-60)' : 'rotate(0)'
@@ -132,7 +144,8 @@ export const XTickValue = (props: Props) => {
           y={isXScaleTicksValueRotated ? graphHeight + 60 : graphHeight + 50}
           fontWeight='700'
           textAnchor='middle'
-          fill={color === 'dark' ? '#333333' : '#999999'}
+          fill={darkMode ? '#FFF' : color === 'dark' ? '#666666' : '#AAAAAA'}
+          opacity={darkMode ? (color === 'dark' ? 0.6 : 0.4) : 1}
         >
           {isBubbleChart ? 'Production Value' : 'Months of the Year'}
         </text>

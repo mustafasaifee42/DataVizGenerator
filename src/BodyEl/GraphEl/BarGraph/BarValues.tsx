@@ -1,4 +1,4 @@
-import { DATA, HEIGHT, WIDTH, BARSMARGINSIDE } from '../../Constants';
+import { DATA, BARSMARGINSIDE } from '../../Constants';
 import { scaleLinear, scaleBand } from 'd3-scale';
 import { getMargin } from '../../Utils';
 
@@ -12,6 +12,9 @@ interface Props {
   yScaleTicksValuePosition: 'top' | 'center';
   isTicksTitleVisible: boolean;
   isValueColored: boolean;
+  width: number;
+  height: number;
+  darkMode: boolean;
 }
 
 export const BarValues = (props: Props) => {
@@ -25,6 +28,9 @@ export const BarValues = (props: Props) => {
     isTicksTitleVisible,
     primaryFont,
     isValueColored,
+    width,
+    height,
+    darkMode,
   } = props;
   const margin = getMargin(
     isYScaleTicksValueVisible,
@@ -38,14 +44,14 @@ export const BarValues = (props: Props) => {
     isYScaleTicksValueVisible && yScaleTicksValuePosition === 'top'
       ? BARSMARGINSIDE
       : 0;
-  const graphHeight = HEIGHT - margin.top - margin.bottom;
-  const graphWidth = WIDTH - margin.left - margin.right - barsOffset;
+  const graphHeight = height - margin.top - margin.bottom;
+  const graphWidth = width - margin.left - margin.right - barsOffset;
   const yScale = scaleLinear().domain([0, 10000]).range([graphHeight, 0]);
   const xScale = scaleBand()
     .range([0, graphWidth])
     .domain(DATA.map(d => d.month))
     .paddingInner(paddingInner)
-    .paddingOuter(0.2);
+    .paddingOuter(isYScaleTicksValueVisible ? 0.2 : 0);
   return (
     <g
       transform={`translate(${
@@ -62,7 +68,9 @@ export const BarValues = (props: Props) => {
             x={(xScale(d.month) as number) + xScale.bandwidth() / 2}
             y={yScale(d.value)}
             dy={-5}
-            fill={isValueColored ? primaryColor : '#666666'}
+            fill={
+              isValueColored ? primaryColor : darkMode ? '#CCCCCC' : '#666666'
+            }
             fontSize={14}
             fontWeight='700'
             textAnchor='middle'

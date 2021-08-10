@@ -1,4 +1,4 @@
-import { DATA, HEIGHT, WIDTH } from '../../Constants';
+import { DATA } from '../../Constants';
 import { scaleLinear } from 'd3-scale';
 import { getMargin } from '../../Utils';
 
@@ -13,6 +13,9 @@ interface Props {
   yScaleTicksValuePosition: 'top' | 'center';
   isTicksTitleVisible: boolean;
   isDataPointVisible: boolean;
+  width: number;
+  height: number;
+  darkMode: boolean;
 }
 
 export const BubbleChart = (props: Props) => {
@@ -27,6 +30,9 @@ export const BubbleChart = (props: Props) => {
     yScaleTicksValuePosition,
     isTicksTitleVisible,
     isDataPointVisible,
+    width,
+    height,
+    darkMode,
   } = props;
   const margin = getMargin(
     isYScaleTicksValueVisible,
@@ -35,8 +41,8 @@ export const BubbleChart = (props: Props) => {
     yScaleTicksValueAlignment,
     isXScaleTicksValueRotated,
   );
-  const graphHeight = HEIGHT - margin.top - margin.bottom;
-  const graphWidth = WIDTH - margin.left - margin.right;
+  const graphHeight = height - margin.top - margin.bottom;
+  const graphWidth = width - margin.left - margin.right;
   const yScale = scaleLinear().domain([0, 10000]).range([graphHeight, 0]);
   const xScale = scaleLinear().range([0, graphWidth]).domain([0, 10000]);
   const rScale = scaleLinear().range([2, 25]).domain([0, 10000]);
@@ -69,7 +75,7 @@ export const BubbleChart = (props: Props) => {
             <text
               x={xScale(d.value)}
               y={yScale(d.value1)}
-              fill='#333333'
+              fill={darkMode ? '#EEE' : '#333333'}
               fontFamily={primaryFont}
               fontSize='10px'
               dy={3}

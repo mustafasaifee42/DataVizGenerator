@@ -13,7 +13,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   h1 {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   h2 {
@@ -26,6 +26,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     margin: 0;
     min-width: 100%;
+    color: #333333;
   }
 
   h6 {

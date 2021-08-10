@@ -1,4 +1,4 @@
-import { DATA, HEIGHT, WIDTH, BARSMARGINSIDE } from '../../Constants';
+import { DATA, BARSMARGINSIDE } from '../../Constants';
 import { scaleLinear, scaleBand } from 'd3-scale';
 import { getMargin } from '../../Utils';
 
@@ -11,6 +11,8 @@ interface Props {
   yScaleTicksValueAlignment: 'left' | 'right';
   yScaleTicksValuePosition: 'top' | 'center';
   isTicksTitleVisible: boolean;
+  width: number;
+  height: number;
 }
 
 export const Bars = (props: Props) => {
@@ -23,6 +25,8 @@ export const Bars = (props: Props) => {
     yScaleTicksValueAlignment,
     yScaleTicksValuePosition,
     isTicksTitleVisible,
+    width,
+    height,
   } = props;
   const margin = getMargin(
     isYScaleTicksValueVisible,
@@ -35,15 +39,15 @@ export const Bars = (props: Props) => {
     isYScaleTicksValueVisible && yScaleTicksValuePosition === 'top'
       ? BARSMARGINSIDE
       : 0;
-  const graphHeight = HEIGHT - margin.top - margin.bottom;
-  const graphWidth = WIDTH - margin.left - margin.right - barsOffset;
+  const graphHeight = height - margin.top - margin.bottom;
+  const graphWidth = width - margin.left - margin.right - barsOffset;
   const paddingInner = barWidth === 0 ? 0.1 : barWidth === 1 ? 0.25 : 0.5;
   const yScale = scaleLinear().domain([0, 10000]).range([graphHeight, 0]);
   const xScale = scaleBand()
     .range([0, graphWidth])
     .domain(DATA.map(d => d.month))
     .paddingInner(paddingInner)
-    .paddingOuter(0.2);
+    .paddingOuter(isYScaleTicksValueVisible ? 0.2 : 0);
   return (
     <g
       transform={`translate(${

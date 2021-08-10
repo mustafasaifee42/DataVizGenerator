@@ -1,4 +1,3 @@
-import { HEIGHT, WIDTH } from '../../Constants';
 import { scaleLinear } from 'd3-scale';
 import { getMargin } from '../../Utils';
 
@@ -11,6 +10,9 @@ interface Props {
   yScaleTicksValuePosition: 'top' | 'center';
   color: 'dark' | 'light';
   tickStyle: 0 | 1 | 2 | 3 | 4;
+  width: number;
+  height: number;
+  darkMode: boolean;
 }
 
 export const YTickValue = (props: Props) => {
@@ -23,6 +25,9 @@ export const YTickValue = (props: Props) => {
     color,
     primaryFont,
     tickStyle,
+    width,
+    height,
+    darkMode,
   } = props;
   const margin = getMargin(
     isYScaleTicksValueVisible,
@@ -31,8 +36,8 @@ export const YTickValue = (props: Props) => {
     yScaleTicksValueAlignment,
     isXScaleTicksValueRotated,
   );
-  const graphHeight = HEIGHT - margin.top - margin.bottom;
-  const graphWidth = WIDTH - margin.left - margin.right;
+  const graphHeight = height - margin.top - margin.bottom;
+  const graphWidth = width - margin.left - margin.right;
   const yScale = scaleLinear().domain([0, 10000]).range([graphHeight, 0]);
   const tickValues = [0, 2000, 4000, 6000, 8000, 10000];
   return (
@@ -66,7 +71,10 @@ export const YTickValue = (props: Props) => {
                     : 5
                   : 0
               }
-              fill={color === 'dark' ? '#666666' : '#AAAAAA'}
+              fill={
+                darkMode ? '#FFF' : color === 'dark' ? '#666666' : '#AAAAAA'
+              }
+              opacity={darkMode ? (color === 'dark' ? 0.6 : 0.4) : 1}
               key={i}
             >
               {d}
@@ -82,7 +90,7 @@ export const YTickValue = (props: Props) => {
                 ? -20
                 : -50
               : yScaleTicksValuePosition === 'top'
-              ? graphWidth + 20
+              ? graphWidth + 30
               : graphWidth + 70
           },${graphHeight / 2})`}
         >
@@ -93,7 +101,8 @@ export const YTickValue = (props: Props) => {
             y={0}
             fontWeight='700'
             textAnchor='middle'
-            fill={color === 'dark' ? '#333333' : '#999999'}
+            fill={darkMode ? '#FFF' : color === 'dark' ? '#666666' : '#AAAAAA'}
+            opacity={darkMode ? (color === 'dark' ? 0.6 : 0.4) : 1}
             transform='rotate(-90)'
           >
             Sales Per Month

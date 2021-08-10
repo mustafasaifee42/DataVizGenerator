@@ -30,6 +30,12 @@ export const COLORARRAY = [
   '#BAC0CB',
 ];
 
+export const BGCOLORARRAY = ['#FFFFFF', '#F5F7FB', '#22252D'];
+
+export const CARDBGCOLORARRAY = ['#F5F7FB', '#FFFFFF', '#07090A'];
+
+export const DROPDOWNBGCOLORARRAY = ['#CCCCCC', '#CCCCCC', '#333'];
+
 export const DATA = [
   {
     month: 'Jan',
@@ -105,9 +111,32 @@ export const DATA = [
   },
 ];
 
-export const HEIGHT = 320;
+export const WINDOWWIDTH = 1280;
 
-export const WIDTH = 720;
+export const GUTTER = 20;
+
+export const COLUMNWIDTH = [
+  {
+    oneColumn: 295,
+    twoColumn: 610,
+    threeColumn: 925,
+    fullWidth: 1240,
+  },
+  {
+    oneColumn: 270,
+    twoColumn: 560,
+    threeColumn: 850,
+    fullWidth: 1140,
+  },
+  {
+    oneColumn: 255,
+    twoColumn: 530,
+    threeColumn: 805,
+    fullWidth: 1080,
+  },
+];
+
+export const HEIGHT = 260;
 
 export const TICKTITLEHEIGHT = 30;
 

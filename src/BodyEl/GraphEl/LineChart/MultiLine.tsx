@@ -1,4 +1,4 @@
-import { DATA, HEIGHT, WIDTH } from '../../Constants';
+import { DATA } from '../../Constants';
 import { scaleLinear } from 'd3-scale';
 import { line, area, curveLinear, curveMonotoneX, curveStep } from 'd3-shape';
 import { getMargin } from '../../Utils';
@@ -15,6 +15,8 @@ interface Props {
   curveType: 0 | 1 | 2;
   isDataPointVisible: boolean;
   isAreaVisible: boolean;
+  width: number;
+  height: number;
 }
 
 export const MultiLine = (props: Props) => {
@@ -30,6 +32,8 @@ export const MultiLine = (props: Props) => {
     curveType,
     isDataPointVisible,
     isAreaVisible,
+    width,
+    height,
   } = props;
   const margin = getMargin(
     isYScaleTicksValueVisible,
@@ -38,8 +42,8 @@ export const MultiLine = (props: Props) => {
     yScaleTicksValueAlignment,
     isXScaleTicksValueRotated,
   );
-  const graphHeight = HEIGHT - margin.top - margin.bottom;
-  const graphWidth = WIDTH - margin.left - margin.right;
+  const graphHeight = height - margin.top - margin.bottom;
+  const graphWidth = width - margin.left - margin.right;
   const yScale = scaleLinear().domain([0, 10000]).range([graphHeight, 0]);
   const xScale = scaleLinear()
     .range([0, graphWidth])

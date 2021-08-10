@@ -1,4 +1,4 @@
-import { DATA, HEIGHT, WIDTH } from '../../Constants';
+import { DATA } from '../../Constants';
 import { scaleLinear } from 'd3-scale';
 import { line, area, curveLinear, curveMonotoneX, curveStep } from 'd3-shape';
 import { getMargin } from '../../Utils';
@@ -15,6 +15,9 @@ interface Props {
   isAreaVisible: boolean;
   isDataPointVisible: boolean;
   isDataValueVisible: boolean;
+  width: number;
+  height: number;
+  darkMode: boolean;
 }
 
 export const Line = (props: Props) => {
@@ -30,6 +33,9 @@ export const Line = (props: Props) => {
     isAreaVisible,
     isDataPointVisible,
     isDataValueVisible,
+    width,
+    height,
+    darkMode,
   } = props;
   const margin = getMargin(
     isYScaleTicksValueVisible,
@@ -38,8 +44,8 @@ export const Line = (props: Props) => {
     yScaleTicksValueAlignment,
     isXScaleTicksValueRotated,
   );
-  const graphHeight = HEIGHT - margin.top - margin.bottom;
-  const graphWidth = WIDTH - margin.left - margin.right;
+  const graphHeight = height - margin.top - margin.bottom;
+  const graphWidth = width - margin.left - margin.right;
   const yScale = scaleLinear().domain([0, 10000]).range([graphHeight, 0]);
   const xScale = scaleLinear()
     .range([0, graphWidth])
@@ -85,8 +91,8 @@ export const Line = (props: Props) => {
                 y={isDataPointVisible ? -25 : -13}
                 width={40}
                 height={20}
-                fill='#FFF'
-                opacity={0.7}
+                fill={darkMode ? '#07090A' : '#FFF'}
+                opacity={darkMode ? 0.5 : 0.7}
                 rx={2}
                 ry={2}
               />
@@ -95,7 +101,7 @@ export const Line = (props: Props) => {
                 x={0}
                 y={0}
                 dy={isDataPointVisible ? -10 : 3}
-                fill={'#666666'}
+                fill={darkMode ? '#CCC' : '#666666'}
                 fontSize={14}
                 fontWeight='700'
                 textAnchor='middle'

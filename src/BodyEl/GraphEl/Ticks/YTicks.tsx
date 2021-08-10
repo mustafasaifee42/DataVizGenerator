@@ -1,4 +1,3 @@
-import { HEIGHT, WIDTH } from '../../Constants';
 import { scaleLinear } from 'd3-scale';
 import { getMargin } from '../../Utils';
 
@@ -9,6 +8,9 @@ interface Props {
   yScaleTicksValueAlignment: 'left' | 'right';
   yScaleTicksValuePosition: 'top' | 'center';
   tickStyle: 0 | 1 | 2 | 3 | 4;
+  width: number;
+  height: number;
+  darkMode: boolean;
 }
 export const YTicks = (props: Props) => {
   const {
@@ -18,6 +20,9 @@ export const YTicks = (props: Props) => {
     isXScaleTicksValueRotated,
     isTicksTitleVisible,
     tickStyle,
+    width,
+    height,
+    darkMode,
   } = props;
   const margin = getMargin(
     isYScaleTicksValueVisible,
@@ -26,8 +31,8 @@ export const YTicks = (props: Props) => {
     yScaleTicksValueAlignment,
     isXScaleTicksValueRotated,
   );
-  const graphHeight = HEIGHT - margin.top - margin.bottom;
-  const graphWidth = WIDTH - margin.left - margin.right;
+  const graphHeight = height - margin.top - margin.bottom;
+  const graphWidth = width - margin.left - margin.right;
   const yScale = scaleLinear().domain([0, 10000]).range([graphHeight, 0]);
   const tickValues = [0, 2000, 4000, 6000, 8000, 10000];
   return (
@@ -58,11 +63,16 @@ export const YTicks = (props: Props) => {
               y2={yScale(d)}
               stroke={
                 tickStyle === 4
-                  ? '#FFFFFF'
+                  ? darkMode
+                    ? '#22252D'
+                    : '#FFFFFF'
+                  : darkMode
+                  ? '#FFF'
                   : tickStyle === 1
                   ? '#AAAAAA'
                   : '#DDDDDD'
               }
+              opacity={tickStyle === 4 ? 1 : darkMode ? 0.3 : 1}
               strokeWidth={1}
               strokeDasharray={tickStyle === 1 ? '8' : '0'}
               key={i}
