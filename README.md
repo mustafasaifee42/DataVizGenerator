@@ -1,6 +1,6 @@
 # About DashboardBot
 
-DashboardBot is an algorithm-driven design tool applied to data visualization. It generates variations of designs for different graphs.
+[DashboardBot](https://www.dashboardbot.mustafasaifee.com/) is an algorithm-driven design tool applied to data visualization. It generates variations of designs for different graphs.
 
 ## Inspiration
 
