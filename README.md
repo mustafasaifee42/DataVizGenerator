@@ -4,7 +4,7 @@
 
 ## Inspiration
 
-DashboardBot is inspired by [Uibot](https://www.uibot.app/) by [Janne Aukia](https://twitter.com/jaukia). The inspiration of styles comes from various examples on Dribbble.
+DashboardBot is inspired by [Uibot](https://www.uibot.app/) by [Janne Aukia](https://twitter.com/jaukia). The inspiration of styles comes from various examples on Dribbble. 
 
 ## Implementation
 
